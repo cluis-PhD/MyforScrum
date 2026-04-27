@@ -117,6 +117,26 @@ export function CreateCourse({ onBack, onSave }: CreateCourseProps) {
     // Save course
     setIsSaving(true);
     try {
+      // Converter datas do formato YYYY-MM-DD para DD/MM/YY
+      const formatDateToPT = (dateStr: string) => {
+        if (!dateStr) return '';
+        const [year, month, day] = dateStr.split('-');
+        return `${day}/${month}/${year.slice(-2)}`;
+      };
+
+      const courseData = {
+        name,
+        description,
+        startDate: formatDateToPT(startDate),
+        endDate: formatDateToPT(endDate),
+      };
+
+      console.log('[CreateCourse] 📤 Dados a enviar:', courseData);
+      console.log('[CreateCourse] startDate original:', startDate);
+      console.log('[CreateCourse] endDate original:', endDate);
+      console.log('[CreateCourse] startDate formatado:', courseData.startDate);
+      console.log('[CreateCourse] endDate formatado:', courseData.endDate);
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-1184b871/courses`,
         {
@@ -125,16 +145,13 @@ export function CreateCourse({ onBack, onSave }: CreateCourseProps) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${publicAnonKey}`,
           },
-          body: JSON.stringify({
-            name,
-            description,
-            startDate,
-            endDate,
-          }),
+          body: JSON.stringify(courseData),
         }
       );
 
       const data = await response.json();
+
+      console.log('[CreateCourse] 📥 Resposta do backend:', data);
 
       if (!response.ok) {
         throw new Error(data.error || 'Erro ao criar curso');
@@ -418,8 +435,9 @@ export function CourseManagement({ onBack, onNavigate }: CourseManagementProps) 
       }
 
       const data = await response.json();
-      
+
       if (data.success && Array.isArray(data.courses)) {
+        console.log('[CourseManagement] Cursos recebidos do backend:', data.courses);
         setCourses(data.courses);
         console.log(`${data.courses.length} cursos carregados com sucesso`);
       } else {
@@ -538,6 +556,44 @@ export function CourseManagement({ onBack, onNavigate }: CourseManagementProps) 
 
   const getStoryCount = (courseId: string) => {
     return stories.filter(s => s.courseId === courseId).length;
+  };
+
+  // Função para formatar data de forma segura
+  const formatDate = (dateString: string | undefined | null): string => {
+    if (!dateString || dateString.trim() === '') {
+      return '--/--/--';
+    }
+
+    // Se a data já vem formatada (formato dd/mm/yyyy), converter ano para 2 dígitos
+    const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (datePattern.test(dateString)) {
+      const [day, month, year] = dateString.split('/');
+      return `${day}/${month}/${year.slice(-2)}`;
+    }
+
+    // Formato dd/mm/yy (já com 2 dígitos)
+    const datePatternShort = /^\d{2}\/\d{2}\/\d{2}$/;
+    if (datePatternShort.test(dateString)) {
+      return dateString; // Já está no formato correto
+    }
+
+    // Caso contrário, tentar fazer parse e formatar
+    try {
+      const date = new Date(dateString);
+
+      // Verificar se a data é válida
+      if (isNaN(date.getTime())) {
+        return '--/--/--';
+      }
+
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = String(date.getFullYear()).slice(-2);
+
+      return `${day}/${month}/${year}`;
+    } catch (error) {
+      return '--/--/--';
+    }
   };
 
   const filteredCourses = courses.filter(course =>
@@ -672,7 +728,7 @@ export function CourseManagement({ onBack, onNavigate }: CourseManagementProps) 
                       </div>
                       <p className="text-[14px] text-slate-500 mb-2">{course.description}</p>
                       <p className="text-[12px] text-slate-400">
-                        {new Date(course.startDate).toLocaleDateString('pt-PT')} - {new Date(course.endDate).toLocaleDateString('pt-PT')}
+                        {formatDate(course.startDate)}
                       </p>
                     </div>
                   </div>
