@@ -16,13 +16,13 @@ app.use("/*", cors({
 // ✅ MIGRADO PARA KV_STORE - Persistência permanente garantida
 // Todos os dados agora são salvos no Supabase e não são perdidos ao reiniciar o servidor
 
-app.get("/make-server-42b5d594/health", (c) => {
+app.get("/make-server-1184b871/health", (c) => {
   return c.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
 // ==================== COURSES ====================
 
-app.post("/make-server-42b5d594/courses", async (c) => {
+app.post("/make-server-1184b871/courses", async (c) => {
   try {
     const body = await c.req.json();
     const { name, description, studentsList } = body;
@@ -56,7 +56,7 @@ app.post("/make-server-42b5d594/courses", async (c) => {
   }
 });
 
-app.get("/make-server-42b5d594/courses", async (c) => {
+app.get("/make-server-1184b871/courses", async (c) => {
   try {
     const courses = await kv.getByPrefix("course:");
     courses.sort((a: any, b: any) => 
@@ -69,7 +69,7 @@ app.get("/make-server-42b5d594/courses", async (c) => {
   }
 });
 
-app.get("/make-server-42b5d594/courses/:id", async (c) => {
+app.get("/make-server-1184b871/courses/:id", async (c) => {
   try {
     const courseId = c.req.param("id");
     const course = await kv.get(`course:${courseId}`);
@@ -84,7 +84,7 @@ app.get("/make-server-42b5d594/courses/:id", async (c) => {
   }
 });
 
-app.put("/make-server-42b5d594/courses/:id", async (c) => {
+app.put("/make-server-1184b871/courses/:id", async (c) => {
   try {
     const courseId = c.req.param("id");
     const body = await c.req.json();
@@ -104,7 +104,7 @@ app.put("/make-server-42b5d594/courses/:id", async (c) => {
   }
 });
 
-app.delete("/make-server-42b5d594/courses/:id", async (c) => {
+app.delete("/make-server-1184b871/courses/:id", async (c) => {
   try {
     const courseId = c.req.param("id");
     const existing = await kv.get(`course:${courseId}`);
@@ -124,7 +124,7 @@ app.delete("/make-server-42b5d594/courses/:id", async (c) => {
 
 // ==================== SPRINTS ====================
 
-app.post("/make-server-42b5d594/sprints", async (c) => {
+app.post("/make-server-1184b871/sprints", async (c) => {
   try {
     const body = await c.req.json();
     const { name, goal, startDate, endDate, courseId, courseName } = body;
@@ -160,7 +160,7 @@ app.post("/make-server-42b5d594/sprints", async (c) => {
   }
 });
 
-app.get("/make-server-42b5d594/sprints", async (c) => {
+app.get("/make-server-1184b871/sprints", async (c) => {
   try {
     const sprints = await kv.getByPrefix("sprint:");
     
@@ -195,7 +195,7 @@ app.get("/make-server-42b5d594/sprints", async (c) => {
   }
 });
 
-app.delete("/make-server-42b5d594/sprints/:id", async (c) => {
+app.delete("/make-server-1184b871/sprints/:id", async (c) => {
   try {
     const sprintId = c.req.param("id");
     const existing = await kv.get(`sprint:${sprintId}`);
@@ -226,7 +226,7 @@ app.delete("/make-server-42b5d594/sprints/:id", async (c) => {
 
 // ==================== STORIES ====================
 
-app.post("/make-server-42b5d594/stories", async (c) => {
+app.post("/make-server-1184b871/stories", async (c) => {
   try {
     const body = await c.req.json();
     const { title, description, priority, team, acceptanceCriteria, sprintId, courseId } = body;
@@ -276,7 +276,7 @@ app.post("/make-server-42b5d594/stories", async (c) => {
   }
 });
 
-app.get("/make-server-42b5d594/stories", async (c) => {
+app.get("/make-server-1184b871/stories", async (c) => {
   try {
     const stories = await kv.getByPrefix("story:");
     
@@ -296,7 +296,7 @@ app.get("/make-server-42b5d594/stories", async (c) => {
   }
 });
 
-app.get("/make-server-42b5d594/stories/:id", async (c) => {
+app.get("/make-server-1184b871/stories/:id", async (c) => {
   try {
     const storyId = c.req.param("id");
     console.log('[BACKEND] 🔍 GET /stories/:id - storyId recebido:', storyId);
@@ -326,7 +326,7 @@ app.get("/make-server-42b5d594/stories/:id", async (c) => {
   }
 });
 
-app.put("/make-server-42b5d594/stories/:id", async (c) => {
+app.put("/make-server-1184b871/stories/:id", async (c) => {
   try {
     const storyId = c.req.param("id");
     const body = await c.req.json();
@@ -352,7 +352,7 @@ app.put("/make-server-42b5d594/stories/:id", async (c) => {
   }
 });
 
-app.delete("/make-server-42b5d594/stories/:id", async (c) => {
+app.delete("/make-server-1184b871/stories/:id", async (c) => {
   try {
     const storyId = c.req.param("id");
     const story = await kv.get(`story:${storyId}`);
@@ -382,7 +382,7 @@ app.delete("/make-server-42b5d594/stories/:id", async (c) => {
 
 // ==================== TEAMS ====================
 
-app.post("/make-server-42b5d594/teams", async (c) => {
+app.post("/make-server-1184b871/teams", async (c) => {
   try {
     const body = await c.req.json();
     const { name, members, courseId } = body;
@@ -409,7 +409,7 @@ app.post("/make-server-42b5d594/teams", async (c) => {
   }
 });
 
-app.get("/make-server-42b5d594/teams", async (c) => {
+app.get("/make-server-1184b871/teams", async (c) => {
   try {
     const teams = await kv.getByPrefix("team:");
     teams.sort((a: any, b: any) => 
@@ -422,7 +422,7 @@ app.get("/make-server-42b5d594/teams", async (c) => {
   }
 });
 
-app.delete("/make-server-42b5d594/teams/:id", async (c) => {
+app.delete("/make-server-1184b871/teams/:id", async (c) => {
   try {
     const teamId = c.req.param("id");
     const existing = await kv.get(`team:${teamId}`);
@@ -442,7 +442,7 @@ app.delete("/make-server-42b5d594/teams/:id", async (c) => {
 
 // ==================== STUDENTS ====================
 
-app.post("/make-server-42b5d594/students", async (c) => {
+app.post("/make-server-1184b871/students", async (c) => {
   try {
     const body = await c.req.json();
     const { id, name, email, courseId, teamId } = body;
@@ -478,7 +478,7 @@ app.post("/make-server-42b5d594/students", async (c) => {
   }
 });
 
-app.get("/make-server-42b5d594/students", async (c) => {
+app.get("/make-server-1184b871/students", async (c) => {
   try {
     const students = await kv.getByPrefix("student:");
     students.sort((a: any, b: any) => 
@@ -492,7 +492,7 @@ app.get("/make-server-42b5d594/students", async (c) => {
 });
 
 // ✅ ROTA PUT ADICIONADA - Esta era a rota que faltava e causava o erro 404!
-app.put("/make-server-42b5d594/students/:id", async (c) => {
+app.put("/make-server-1184b871/students/:id", async (c) => {
   try {
     const studentId = c.req.param("id");
     const body = await c.req.json();
@@ -548,7 +548,7 @@ app.put("/make-server-42b5d594/students/:id", async (c) => {
 });
 
 // 🔧 ROTA ESPECIAL: Sincronizar/Recriar formando preservando o ID original
-app.post("/make-server-42b5d594/students/:id/sync", async (c) => {
+app.post("/make-server-1184b871/students/:id/sync", async (c) => {
   try {
     const studentId = c.req.param("id");
     const body = await c.req.json();
@@ -587,7 +587,7 @@ app.post("/make-server-42b5d594/students/:id/sync", async (c) => {
   }
 });
 
-app.delete("/make-server-42b5d594/students/:id", async (c) => {
+app.delete("/make-server-1184b871/students/:id", async (c) => {
   try {
     const studentId = c.req.param("id");
     const existing = await kv.get(`student:${studentId}`);
@@ -608,7 +608,7 @@ app.delete("/make-server-42b5d594/students/:id", async (c) => {
 // ==================== DEBUG ====================
 
 // 🧹 ROTA DE LIMPEZA: Remove formandos duplicados (mantém o mais recente)
-app.post("/make-server-42b5d594/cleanup/duplicates", async (c) => {
+app.post("/make-server-1184b871/cleanup/duplicates", async (c) => {
   try {
     const students = await kv.getByPrefix("student:");
     
@@ -666,7 +666,7 @@ app.post("/make-server-42b5d594/cleanup/duplicates", async (c) => {
   }
 });
 
-app.get("/make-server-42b5d594/debug/storage-keys", async (c) => {
+app.get("/make-server-1184b871/debug/storage-keys", async (c) => {
   try {
     const courses = await kv.getByPrefix("course:");
     const sprints = await kv.getByPrefix("sprint:");
